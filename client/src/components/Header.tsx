@@ -7,9 +7,9 @@ export default function Header() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-            <span className="text-gray-900 font-bold text-lg">LF</span>
+            <span className="text-gray-900 font-bold text-lg">RF</span>
           </div>
-          <span className="font-bold text-xl text-white">Liberdade Financeira</span>
+          <span className="font-bold text-xl text-white">Radar Financeiro Pessoal</span>
         </div>
 
         {/* CTA Button */}
