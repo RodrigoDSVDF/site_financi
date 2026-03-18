@@ -22,11 +22,15 @@ export default function HeroSection() {
               </p>
             </div>
 
+            {/* Botão Principal com Link de Checkout */}
             <Button 
+              asChild
               className="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold px-8 py-6 text-lg rounded-lg transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/50 hover:scale-105 inline-flex items-center gap-2"
             >
-              Quero meu Combo de Liberdade Financeira
-              <ArrowRight className="w-5 h-5" />
+              <a href="https://pay.cakto.com.br/xxienb8_809928" target="_blank" rel="noopener noreferrer">
+                Quero meu Combo de Liberdade Financeira
+                <ArrowRight className="w-5 h-5" />
+              </a>
             </Button>
 
             <p className="text-sm text-gray-400">
