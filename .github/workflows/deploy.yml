@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
 
-# ESTA SEÇÃO É A CHAVE: Ela dá permissão para o robô criar a branch gh-pages
+# Permissões necessárias para o GitHub Actions criar a branch gh-pages
 permissions:
   contents: write
 
@@ -22,10 +22,12 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
+        # Rodamos o install dentro da pasta client onde está o seu package.json
         run: npm install
         working-directory: ./client
 
       - name: Build
+        # O build é disparado dentro de client, mas o Vite joga o resultado em /dist (raiz)
         run: npm run build
         working-directory: ./client
 
@@ -33,5 +35,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Ajustado para garantir que pegue a pasta dist correta
+          # IMPORTANTE: Como seu vite.config define o outDir na raiz, 
+          # o publish_dir deve ser ./dist (relativo à raiz do repositório)
           publish_dir: ./dist
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
