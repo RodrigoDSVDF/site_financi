@@ -12,11 +12,14 @@ export default function Header() {
           <span className="font-bold text-xl text-white">Radar Financeiro Pessoal</span>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button com Link de Checkout */}
         <Button 
+          asChild
           className="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50"
         >
-          Quero meu Combo
+          <a href="https://pay.cakto.com.br/xxienb8_809928" target="_blank" rel="noopener noreferrer">
+            Quero meu Combo
+          </a>
         </Button>
       </div>
     </header>
