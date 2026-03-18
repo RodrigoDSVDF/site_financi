@@ -17,7 +17,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8 # Ou a versão que você usa localmente
+          version: 8
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -26,19 +26,17 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        # Instalamos na raiz para garantir que o 'shared' e 'client' sejam lidos
         run: pnpm install
 
       - name: Build
-        # O comando de build deve ser disparado de onde o package.json principal está
-        # Se o script de build estiver no package.json da raiz:
+        # Rodando o build a partir da raiz, mas apontando para o client
         run: pnpm run build
-        
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # O seu vite.config.ts manda o build para a pasta /dist na raiz
+          # CORREÇÃO: Publica a pasta 'dist' que o seu vite.config.ts gera na raiz
           publish_dir: ./dist
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
