@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
 
-# Permissões necessárias para o GitHub Actions criar a branch gh-pages
 permissions:
   contents: write
 
@@ -15,28 +14,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # Ou a versão que você usa localmente
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        # Rodamos o install dentro da pasta client onde está o seu package.json
-        run: npm install
-        working-directory: ./client
+        # Instalamos na raiz para garantir que o 'shared' e 'client' sejam lidos
+        run: pnpm install
 
       - name: Build
-        # O build é disparado dentro de client, mas o Vite joga o resultado em /dist (raiz)
-        run: npm run build
-        working-directory: ./client
-
+        # O comando de build deve ser disparado de onde o package.json principal está
+        # Se o script de build estiver no package.json da raiz:
+        run: pnpm run build
+        
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # IMPORTANTE: Como seu vite.config define o outDir na raiz, 
-          # o publish_dir deve ser ./dist (relativo à raiz do repositório)
+          # O seu vite.config.ts manda o build para a pasta /dist na raiz
           publish_dir: ./dist
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
