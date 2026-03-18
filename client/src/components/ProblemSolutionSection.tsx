@@ -9,7 +9,7 @@ export default function ProblemSolutionSection() {
         {/* Problema e Solução Visual */}
         <div className="mb-12">
           <img 
-            src="f6"
+            src="./f6.png"
             alt="Problema vs Solução"
             className="w-full rounded-lg shadow-2xl"
           />
