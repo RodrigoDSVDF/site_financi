@@ -76,14 +76,13 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 // =============================================================================
-// Configuração Final Corrigida para Deploy
+// Configuração Final Corrigida
 // =============================================================================
 
 export default defineConfig({
-  // Base path essencial para GitHub Pages
-  base: "/site_financi/",
+  // ALTERAÇÃO AQUI: Mudamos de "/site_financi/" para "./" para caminhos relativos
+  base: "./",
   
-  // Define a pasta client como raiz do projeto frontend
   root: path.resolve(PROJECT_ROOT, "client"),
 
   plugins: [
@@ -95,7 +94,6 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      // Ajuste dos aliases para refletir que a root agora é 'client'
       "@": path.resolve(PROJECT_ROOT, "client/src"),
       "@shared": path.resolve(PROJECT_ROOT, "shared"),
       "@assets": path.resolve(PROJECT_ROOT, "attached_assets"),
@@ -103,7 +101,6 @@ export default defineConfig({
   },
 
   build: {
-    // IMPORTANTE: Como a root é 'client', o outDir deve ser relativo a ela ou absoluto
     outDir: path.resolve(PROJECT_ROOT, "dist"),
     emptyOutDir: true,
     sourcemap: false,
