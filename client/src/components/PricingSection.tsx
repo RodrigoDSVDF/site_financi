@@ -18,7 +18,7 @@ export default function PricingSection() {
             <h3 className="text-xl font-bold text-white mb-2">Ebook</h3>
             <p className="text-gray-400 mb-4">O Guia da Consciência Financeira</p>
             <div className="mb-6">
-              <p className="text-3xl font-bold text-cyan-400">R$ 19,90</p>
+              <p className="text-3xl font-bold text-cyan-400">R$ 57,90</p>
               <p className="text-sm text-gray-500">Valor individual</p>
             </div>
             <ul className="space-y-2 text-left text-sm text-gray-300 mb-6">
@@ -38,7 +38,7 @@ export default function PricingSection() {
             <h3 className="text-xl font-bold text-white mb-2">App</h3>
             <p className="text-gray-400 mb-4">Dashboard da sua Vida (Anual)</p>
             <div className="mb-6">
-              <p className="text-3xl font-bold text-green-400">R$ 197</p>
+              <p className="text-3xl font-bold text-green-400">R$ 97</p>
               <p className="text-sm text-gray-500">Valor individual</p>
             </div>
             <ul className="space-y-2 text-left text-sm text-gray-300 mb-6">
