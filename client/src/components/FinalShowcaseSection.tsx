@@ -18,11 +18,11 @@ export default function FinalShowcaseSection() {
         {/* CTA Final */}
         <div className="text-center space-y-6 max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Pronto para transformar suas finanças?
+            Pronto para transformar suas finanças pessoais?
           </h2>
           
           <p className="text-xl text-gray-300 leading-relaxed">
-            Não espere mais um dia sequer. Comece sua jornada para a liberdade financeira agora mesmo com nosso combo completo de Ebook + App.
+            Não espere mais um dia sequer. Comece sua jornada para a educação financeira inteligente agora mesmo com nosso combo completo de Ebook + App.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
