@@ -9,7 +9,7 @@ export default function FinalShowcaseSection() {
         <div className="mb-12 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur-3xl opacity-10"></div>
           <img 
-            src="src="./showcase.png"
+            src="./showcase.png"
             alt="Dashboard Financeiro - Seu dinheiro em equilíbrio"
             className="w-full rounded-lg shadow-2xl relative z-10"
           />
