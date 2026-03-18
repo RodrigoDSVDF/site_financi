@@ -1,7 +1,13 @@
 name: Deploy to GitHub Pages
+
 on:
   push:
     branches: [main]
+
+# ESTA SEÇÃO É A CHAVE: Ela dá permissão para o robô criar a branch gh-pages
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -27,5 +33,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # O segredo está aqui: o Vite cria a pasta dist dentro de client
-          publish_dir: ./client/dist
+          # Ajustado para garantir que pegue a pasta dist correta
+          publish_dir: ./dist
