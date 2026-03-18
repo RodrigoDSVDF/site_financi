@@ -11,7 +11,7 @@ export default function FinalShowcaseSection() {
           <img 
             src="./showcase.png"
             alt="Dashboard Financeiro - Seu dinheiro em equilíbrio"
-            className="w-[600px] max-w-full mx-auto rounded-lg shadow-2xl relative z-10"
+            className="w-[500px] max-w-full mx-auto rounded-lg shadow-2xl relative z-10"
           />
         </div>
 
