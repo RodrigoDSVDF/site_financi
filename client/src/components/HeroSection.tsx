@@ -39,7 +39,7 @@ export default function HeroSection() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur-2xl opacity-20"></div>
               <img 
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663044369660/9FjLXsV8Uz44Yd9pZqDBUe/hero-ebook-app-CaZe24jEGcUYVNgZwrGPwx.webp"
+                src="./f6.png"
                 alt="Ebook e App de Finanças"
                 className="w-full max-w-md rounded-lg shadow-2xl relative z-10"
               />
