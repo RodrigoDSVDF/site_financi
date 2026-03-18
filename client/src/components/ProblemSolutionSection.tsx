@@ -3,13 +3,13 @@ export default function ProblemSolutionSection() {
     <section className="py-16 md:py-24 bg-gray-950">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">
-          O Problema e a Solução
+          A solução do seu problema na palma da mão
         </h2>
 
         {/* Problema e Solução Visual */}
         <div className="mb-12">
           <img 
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663044369660/9FjLXsV8Uz44Yd9pZqDBUe/problem-solution-visual-C5Nq76ax4pKBbq89wHJ6WB.webp"
+            src="f6"
             alt="Problema vs Solução"
             className="w-full rounded-lg shadow-2xl"
           />
