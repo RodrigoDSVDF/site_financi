@@ -1,37 +1,20 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch, Router } from "wouter"; // Adicionado Router aqui
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-
-function RouterComponent() {
-  return (
-    /* IMPORTANTE: O 'base' deve ser exatamente o nome do seu repositório 
-       entre barras, para o wouter entender que o site começa ali.
-    */
-    <Router base="/site_financi">
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/404" component={NotFound} />
-        {/* Rota de fallback para qualquer coisa que não seja as acima */}
-        <Route component={NotFound} />
-      </Switch>
-    </Router>
-  );
-}
+import { Router, Route, Switch } from "wouter";
+// Importe seus componentes aqui (exemplo abaixo)
+// import Home from "./pages/Home";
 
 function App() {
   return (
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster />
-          <RouterComponent />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
+    /* CORREÇÃO: Adicionado o Router com base no nome do repositório */
+    <Router base="/site_financi">
+      <Switch>
+        {/* Exemplo de rota - ajuste conforme seus componentes reais */}
+        <Route path="/" component={() => <div>Página Inicial Carregada!</div>} />
+        <Route path="/ebook" component={() => <div>Página do Ebook</div>} />
+        
+        {/* Rota padrão para 404 dentro do app */}
+        <Route>404 - Página não encontrada</Route>
+      </Switch>
+    </Router>
   );
 }
 
