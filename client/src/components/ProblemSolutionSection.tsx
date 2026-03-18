@@ -9,9 +9,9 @@ export default function ProblemSolutionSection() {
         {/* Problema e Solução Visual */}
         <div className="mb-12">
           <img 
-            src="./f6.png"
+            src="./f5.png"
             alt="Problema vs Solução"
-            className="w-full rounded-lg shadow-2xl"
+            className="w-[500px] max-w-full mx-auto rounded-lg shadow-2xl relative z-10"
           />
         </div>
 
