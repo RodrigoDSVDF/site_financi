@@ -1,19 +1,17 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
-// Manus Debug Collector - Vite Plugin (Mantido para debug)
+// Manus Debug Collector
 // =============================================================================
 
 const PROJECT_ROOT = import.meta.dirname;
 const LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
-const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024; 
-const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6);
+const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024;
 
 function ensureLogDir() {
   if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
@@ -78,34 +76,40 @@ function vitePluginManusDebugCollector(): Plugin {
 }
 
 // =============================================================================
-// Configuração Final
+// Configuração Final Corrigida para Deploy
 // =============================================================================
 
 export default defineConfig({
-  // Define o caminho base para o deploy (ex: GitHub Pages ou subdiretório)
+  // Base path essencial para GitHub Pages
   base: "/site_financi/",
   
-  // Plugins conforme solicitado (incluindo o coletor customizado para manter a funcionalidade de log)
+  // Define a pasta client como raiz do projeto frontend
+  root: path.resolve(PROJECT_ROOT, "client"),
+
   plugins: [
     react(), 
     tailwindcss(), 
     vitePluginManusRuntime(),
-    vitePluginManusDebugCollector() // Remova esta linha se não quiser os logs automáticos
+    vitePluginManusDebugCollector()
   ],
 
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      // Ajuste dos aliases para refletir que a root agora é 'client'
+      "@": path.resolve(PROJECT_ROOT, "client/src"),
+      "@shared": path.resolve(PROJECT_ROOT, "shared"),
+      "@assets": path.resolve(PROJECT_ROOT, "attached_assets"),
     },
   },
-  envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
+
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    // IMPORTANTE: Como a root é 'client', o outDir deve ser relativo a ela ou absoluto
+    outDir: path.resolve(PROJECT_ROOT, "dist"),
     emptyOutDir: true,
+    sourcemap: false,
+    reportCompressedSize: false,
   },
+
   server: {
     port: 3000,
     strictPort: false,
@@ -119,9 +123,5 @@ export default defineConfig({
       "localhost",
       "127.0.0.1",
     ],
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
   },
 });

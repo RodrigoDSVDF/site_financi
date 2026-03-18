@@ -13,6 +13,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -22,11 +23,9 @@ jobs:
         run: npm run build
         working-directory: ./client
 
-      - name: Move Dist
-        run: mv client/dist ./dist
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          # O segredo está aqui: o Vite cria a pasta dist dentro de client
+          publish_dir: ./client/dist
