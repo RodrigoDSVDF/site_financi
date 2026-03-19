@@ -10,16 +10,16 @@ export default function HeroSection() {
           {/* Conteúdo */}
           <div className="space-y-6 text-center md:text-left">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
-              Recupere o controle do seu dinheiro
+              Controle financeiro começa com consciência
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-              Pare de se perguntar para onde ele foi.
+              Descubra exatamente para onde cada real está indo.
             </p>
 
             <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 p-5 sm:p-6 rounded-lg backdrop-blur-sm">
               <p className="text-gray-100 font-medium text-sm sm:text-base">
-                <span className="text-cyan-400 font-bold">O método definitivo</span> para organizar suas finanças (Ebook) aliado à <span className="text-green-400 font-bold">ferramenta que automatiza sua rotina</span> (App). Tudo o que você precisa em um só lugar.
+                <span className="text-cyan-400 font-bold">O método definitivo</span> para organizar suas finanças (Ebook) aliado à <span className="text-green-400 font-bold">ferramenta que facilita sua rotina</span> (App). Tudo o que você precisa em um só lugar.
               </p>
             </div>
 
@@ -35,7 +35,7 @@ export default function HeroSection() {
                   rel="noopener noreferrer"
                   className="whitespace-normal sm:whitespace-nowrap text-center leading-tight flex items-center justify-center gap-2"
                 >
-                  <span>Quero meu Combo de Liberdade Financeira</span>
+                  <span>Garantir meu acesso</span>
                   <ArrowRight className="w-5 h-5 shrink-0" />
                 </a>
               </Button>
