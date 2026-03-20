@@ -63,7 +63,7 @@ export default function PricingSection() {
             <div className="mb-6">
               <p className="text-2xl text-gray-500 line-through">R$ 98</p>
               <p className="text-4xl font-bold text-cyan-400 mb-2">R$ 159,90</p>
-              <p className="text-sm text-gray-400">por R$ 19,90</p>
+              <p className="text-sm text-gray-400">por R$ 9,90</p>
             </div>
             <ul className="space-y-2 text-left text-sm text-gray-300 mb-6">
               <li className="flex items-center gap-2">
