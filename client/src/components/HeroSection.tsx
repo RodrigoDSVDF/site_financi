@@ -9,21 +9,35 @@ export default function HeroSection() {
           
           {/* Conteúdo */}
           <div className="space-y-6 text-center md:text-left">
+            
+            {/* 🔥 TÍTULO MELHORADO */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
-              Controle financeiro começa com consciência
+              <span>Você não está sem dinheiro.</span><br />
+              <span className="text-cyan-400">Só não sabe para onde ele está indo.</span>
             </h1>
             
+            {/* ⚡ SUBTÍTULO MAIS FORTE */}
             <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-              Descubra exatamente para onde cada real está indo.
+              Pare de viver no automático. Descubra em minutos onde você está perdendo dinheiro — e como corrigir.
             </p>
 
+            {/* 💡 CAIXA REFORMULADA */}
             <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 p-5 sm:p-6 rounded-lg backdrop-blur-sm">
               <p className="text-gray-100 font-medium text-sm sm:text-base">
-                <span className="text-cyan-400 font-bold">O método definitivo</span> para organizar suas finanças (Ebook) aliado à <span className="text-green-400 font-bold">ferramenta que facilita sua rotina</span> (App). Tudo o que você precisa em um só lugar.
+                Um sistema simples que mostra onde você erra — e como ajustar sem planilhas complicadas.
+                <br /><br />
+                📊 App para controle automático <br />
+                📘 Guia prático passo a passo <br />
+                ⚡ Método rápido para organizar sua vida financeira
               </p>
             </div>
 
-            {/* Botão Principal com Correção para Mobile */}
+            {/* 🚀 FRASE DE IDENTIFICAÇÃO */}
+            <p className="text-sm text-gray-400">
+              Se você trabalha, ganha… mas nunca vê o dinheiro sobrar, isso é pra você.
+            </p>
+
+            {/* 🔥 BOTÃO MAIS PERSUASIVO */}
             <div className="flex justify-center md:justify-start">
               <Button 
                 asChild
@@ -35,14 +49,15 @@ export default function HeroSection() {
                   rel="noopener noreferrer"
                   className="whitespace-normal sm:whitespace-nowrap text-center leading-tight flex items-center justify-center gap-2"
                 >
-                  <span>Garantir meu acesso</span>
+                  <span>Quero controlar meu dinheiro agora</span>
                   <ArrowRight className="w-5 h-5 shrink-0" />
                 </a>
               </Button>
             </div>
 
+            {/* ⏳ URGÊNCIA */}
             <p className="text-xs sm:text-sm text-gray-400">
-              ✓ Acesso imediato • ✓ Garantia de 7 dias • ✓ Sem compromisso
+              ✓ Acesso imediato • ✓ Garantia de 7 dias • ✓ Oferta por tempo limitado
             </p>
           </div>
 
