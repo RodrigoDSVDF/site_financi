@@ -12,13 +12,15 @@ export default function HeroSection() {
             
             {/* 🔥 TÍTULO MELHORADO */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
-              <span>Você não está sem dinheiro.</span><br />
-              <span className="text-cyan-400">Só não sabe para onde ele está indo.</span>
+              <span>Saia da gestão passiva e assuma o controle estratégico das suas finanças.</span><br />
+              <span className="text-cyan-400">O sistema que converte organização em clareza para suas decisões..</span>
             </h1>
             
             {/* ⚡ SUBTÍTULO MAIS FORTE */}
             <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-              Pare de viver no automático. Descubra em minutos onde você está perdendo dinheiro — e como corrigir.
+              O Invisível é o que trava o seu crescimento.
+Muitas pessoas geram receita, mas poucas possuem inteligência de dados sobre o próprio consumo. Sem uma visão clara, o capital se dilui em micro-decisões diárias.
+O Combo Liberdade Financeira não é apenas sobre "anotar gastos", é sobre construir um ecossistema de dados para que você decida para onde seu dinheiro deve ir — antes mesmo de ele chegar.
             </p>
 
             {/* 💡 CAIXA REFORMULADA */}
