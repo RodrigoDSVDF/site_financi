@@ -2,6 +2,32 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function PricingSection() {
+  
+  // Função para disparar os rastreios
+  const handlePurchase = (productName: string, value: number) => {
+    // Rastreio Meta (Facebook)
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq('track', 'InitiateCheckout', {
+        content_name: productName,
+        currency: 'BRL',
+        value: value,
+      });
+    }
+
+    // Rastreio TikTok
+    if (typeof window !== "undefined" && window.ttq) {
+      window.ttq.track('InitiateCheckout', {
+        contents: [{
+          content_name: productName,
+          quantity: 1,
+          price: value,
+        }],
+        value: value,
+        currency: 'BRL',
+      });
+    }
+  };
+
   return (
     <section className="py-16 md:py-24 bg-gray-950">
       <div className="container mx-auto px-4">
@@ -84,6 +110,7 @@ export default function PricingSection() {
             
             <Button 
               asChild
+              onClick={() => handlePurchase('Combo Ebook + App', 9.90)}
               className="w-full bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50"
             >
               <a href="https://pay.cakto.com.br/xxienb8_809928" target="_blank" rel="noopener noreferrer">
