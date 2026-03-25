@@ -11,7 +11,7 @@ export default function SocialProofSection() {
     {
       name: "João Santos",
       role: "Desenvolvedor",
-      text: "O app é tão simples que minha mãe consegue usar. Saí de uma dívida de R$ 5 mil em 4 meses.",
+      text: "O app é tão simples que minha mãe consegue usar. Organizei minha vida financeira e bati minhas metas em 4 meses.",
       savings: "Dívida zerada"
     },
     {
