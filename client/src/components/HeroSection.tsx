@@ -85,7 +85,7 @@ export default function HeroSection() {
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black px-12 py-8 text-xl rounded-2xl transition-all duration-500 hover:shadow-[0_0_60px_rgba(0,217,255,0.6)] hover:-translate-y-1.5 flex items-center gap-4 h-auto"
               >
                 <a href="https://pay.cakto.com.br/xxienb8_809928" target="_blank" rel="noopener">
-                  ATIVAR MINHA INTELIGÊNCIA AGORA
+                  ACESSAR AGORA MEU APP
                   <ArrowRight className="w-7 h-7" />
                 </a>
               </Button>
