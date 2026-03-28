@@ -5,13 +5,17 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 export default function HeroSection() {
   const { scrollY } = useScroll();
   
-  // useSpring adiciona uma "mola" no movimento, eliminando o aspecto travado
-  const smoothY = useSpring(scrollY, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  // Ajuste de "mola" mais robusto para eliminar o tremor (stiffness menor, damping maior)
+  const smoothY = useSpring(scrollY, { 
+    stiffness: 70, 
+    damping: 30, 
+    restDelta: 0.001,
+  });
   
-  // Valores ajustados para manter a imagem próxima da seção de baixo
-  const yAura = useTransform(smoothY, [0, 800], [0, 100]);
-  const yContent = useTransform(smoothY, [0, 800], [0, -30]);
-  const yMockup = useTransform(smoothY, [0, 800], [0, -60]); // Reduzido de -120 para -60
+  // Valores de Parallax suaves para não "quebrar" o layout
+  const yAura = useTransform(smoothY, [0, 1000], [0, 100]);
+  const yContent = useTransform(smoothY, [0, 1000], [0, -20]);
+  const yMockup = useTransform(smoothY, [0, 1000], [0, -50]);
 
   const features = [
     { icon: LayoutDashboard, title: "App Dashboard Inteligente", desc: "Monitoramento e gráficos automáticos." },
@@ -21,21 +25,24 @@ export default function HeroSection() {
   ];
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden bg-background pt-16 pb-0 md:pt-24">
+    <section className="relative flex flex-col items-center justify-center overflow-hidden bg-background pt-16 pb-0 md:pt-24">
       
-      {/* BACKGROUND COM MOVIMENTO SUAVE */}
+      {/* BACKGROUND - Movimento sutil */}
       <motion.div style={{ y: yAura }} className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-5%] left-[-5%] w-[110%] h-[110%] bg-primary/10 rounded-full blur-[120px] animate-aura" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-secondary/5 rounded-full blur-[100px] animate-aura" style={{ animationDirection: 'reverse' }} />
       </motion.div>
 
       <div className="container relative z-20 mx-auto px-4 w-full">
-        <motion.div style={{ y: yContent }} className="max-w-7xl mx-auto flex flex-col items-center gap-12 md:gap-16 text-center">
+        {/* Conteúdo Principal */}
+        <motion.div 
+          style={{ y: yContent }} 
+          className="max-w-7xl mx-auto flex flex-col items-center gap-12 md:gap-16 text-center will-change-transform"
+        >
           
           <motion.div 
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             className="flex flex-col items-center text-center space-y-6 md:space-y-8 w-full max-w-5xl"
           >
             <div className="space-y-4 md:space-y-6 w-full">
@@ -57,6 +64,7 @@ export default function HeroSection() {
               </p>
             </div>
 
+            {/* Grid de Features - Sem animação individual de scroll para evitar excesso de processamento */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-4xl px-2">
               {features.map((item, i) => (
                 <div key={i} className="glass-card p-5 rounded-2xl flex items-start gap-5 border border-white/5">
@@ -80,10 +88,10 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* MOCKUP - AJUSTADO PARA FICAR MAIS PRÓXIMO DA PRÓXIMA SEÇÃO */}
+          {/* MOCKUP - Parallax Suave e Aproximado */}
           <motion.div 
             style={{ y: yMockup }}
-            className="relative w-full max-w-[320px] md:max-w-2xl px-4 mt-4"
+            className="relative w-full max-w-[320px] md:max-w-2xl px-4 mt-4 will-change-transform"
           >
             <div className="absolute -inset-8 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[60px] blur-3xl opacity-50 z-0" />
             <div className="glass-card relative z-10 p-2 md:p-3 rounded-[32px] md:rounded-[40px] shadow-2xl overflow-hidden">
