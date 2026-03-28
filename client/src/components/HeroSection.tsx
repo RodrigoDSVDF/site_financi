@@ -2,15 +2,50 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, LayoutDashboard, BookOpen, Zap, ShieldCheck } from "lucide-react";
 
 export default function HeroSection() {
+  // Configuração dos elementos flutuantes de vidro (Glass Elements)
+  const glassElements = [
+    { size: '120px', color: 'border-primary/20', animationDelay: '0s' },
+    { size: '80px', color: 'border-secondary/20', animationDelay: '10s' },
+    { size: '160px', color: 'border-chart-5/10', animationDelay: '20s' },
+  ];
+
   return (
     <section className="relative py-20 md:py-32 bg-background overflow-hidden">
-      {/* Background Decorativo - Efeito de profundidade digital */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 opacity-30 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-secondary/10 rounded-full blur-[100px]" />
+      
+      {/* * =============================================================================
+       * Fundo Dinâmico de Alta Performance (Ecossistema de Dados Flutuante)
+       * =============================================================================
+       */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        
+        {/* Camada 1: Gradientes Radiais Móveis (Glows Animados) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-30">
+          <div className="absolute top-[10%] left-[15%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-drift-radial" style={{ animationDelay: '0s' }} />
+          <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-secondary/10 rounded-full blur-[100px] animate-drift-radial" style={{ animationDelay: '5s' }} />
+          <div className="absolute top-[30%] right-[30%] w-[25%] h-[25%] bg-chart-5/10 rounded-full blur-[130px] animate-drift-radial" style={{ animationDelay: '12s' }} />
+        </div>
+
+        {/* Camada 2: Elementos Flutuantes de Vidro (3D/Glass Blocks) */}
+        {glassElements.map((element, index) => (
+          <div
+            key={index}
+            className={`absolute z-10 p-3 bg-card/40 backdrop-blur-xl rounded-[32px] border ${element.color} shadow-2xl animate-rotate-float-glass`}
+            style={{
+              width: element.size,
+              height: element.size,
+              animationDelay: element.animationDelay,
+              top: `${Math.random() * 80 + 10}%`, // Posicionamento randômico suave
+              left: `${Math.random() * 80 + 10}%`,
+            }}
+          >
+            {/* Brilho interno do elemento de vidro */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-[32px]"></div>
+          </div>
+        ))}
       </div>
 
-      <div className="container relative z-10 mx-auto px-4">
+      {/* container Principal - Conteúdo sobre o fundo animado */}
+      <div className="container relative z-20 mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Conteúdo Estratégico */}
@@ -69,9 +104,9 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Área Visual (Mockup com Correção de Empilhamento) */}
+          {/* Área Visual (Mockup Principal) */}
           <div className="relative group">
-            {/* Brilho de Fundo da Imagem */}
+            {/* Brilho de Fundo da Imagem Principal */}
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[40px] blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-700 z-0"></div>
             
             {/* Container da Imagem Principal */}
@@ -79,20 +114,19 @@ export default function HeroSection() {
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
               <img 
                 src="./f6.png" 
-                alt="Interface do App" 
+                alt="Interface do App e Ebook Liberdade Financeira" 
                 className="w-full h-auto rounded-[24px] shadow-2xl transform transition-transform duration-700 group-hover:scale-[1.02]"
                 loading="eager"
               />
             </div>
 
-            {/* BOTÃO CORRIGIDO: ROI Estratégico (Forçado para a frente) */}
-            <div className="absolute -bottom-6 -right-6 bg-secondary p-4 rounded-2xl shadow-[0_20px_50px_rgba(16,185,129,0.4)] hidden md:block animate-bounce duration-[3000ms] z-30 border-4 border-background">
-              <div className="relative z-10 flex flex-col items-center">
-                <Zap className="w-4 h-4 text-secondary-foreground mb-1" />
-                <p className="text-secondary-foreground font-black text-xs uppercase tracking-tighter">ROI Estratégico</p>
-              </div>
+            {/* Floating Element - Detalhe de acabamento "ROI Estratégico" */}
+            <div className="absolute -bottom-8 -right-8 bg-secondary p-4 rounded-2xl shadow-[0_20px_50px_rgba(16,185,129,0.3)] hidden md:block animate-bounce duration-[3000ms] z-30 border-4 border-background">
+              <p className="text-secondary-foreground font-black text-xs uppercase tracking-tighter relative z-10">
+                ROI Estratégico
+              </p>
               {/* Glow de fundo do próprio botão para garantir visibilidade sobre a imagem escura */}
-              <div className="absolute inset-0 bg-secondary rounded-xl blur-md opacity-40 -z-10"></div>
+              <div className="absolute inset-0 bg-secondary rounded-2xl blur-lg opacity-50 z-0"></div>
             </div>
           </div>
           
