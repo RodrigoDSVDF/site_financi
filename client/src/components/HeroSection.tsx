@@ -1,19 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, LayoutDashboard, BookOpen, Zap, ShieldCheck } from "lucide-react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import HeroBackground3D from './HeroBackground3D'; // Certifique-se de que o ficheiro HeroBackground3D.tsx está na mesma pasta
+import HeroBackground3D from './HeroBackground3D'; 
 
 export default function HeroSection() {
   const { scrollY } = useScroll();
   
-  // Ajuste de "mola" para movimento suave (stiffness menor, damping maior)
   const smoothY = useSpring(scrollY, { 
     stiffness: 70, 
     damping: 30, 
     restDelta: 0.001,
   });
   
-  // Valores de Parallax para os elementos de conteúdo
   const yContent = useTransform(smoothY, [0, 1000], [0, -20]);
   const yMockup = useTransform(smoothY, [0, 1000], [0, -50]);
 
@@ -27,16 +25,14 @@ export default function HeroSection() {
   return (
     <section className="relative flex flex-col items-center justify-center overflow-hidden bg-[#020205] pt-16 pb-0 md:pt-24 min-h-screen">
       
-      {/* BACKGROUND 3D - Substitui a aura antiga pelo efeito de partículas neon */}
+      {/* Efeito 3D de fundo */}
       <HeroBackground3D />
 
       <div className="container relative z-20 mx-auto px-4 w-full">
-        {/* Conteúdo Principal com efeito de Parallax no Scroll */}
         <motion.div 
           style={{ y: yContent }} 
           className="max-w-7xl mx-auto flex flex-col items-center gap-12 md:gap-16 text-center will-change-transform"
         >
-          
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -44,13 +40,11 @@ export default function HeroSection() {
             className="flex flex-col items-center text-center space-y-6 md:space-y-8 w-full max-w-5xl"
           >
             <div className="space-y-4 md:space-y-6 w-full">
-              {/* Badge de Elite */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">
                 <ShieldCheck className="w-3 h-3 md:w-4 md:h-4 text-primary animate-pulse" />
                 Sistemas Patrimoniais de Elite
               </div>
               
-              {/* Título Principal */}
               <h1 className="text-[2.6rem] leading-[1.1] sm:text-6xl lg:text-8xl font-black text-white tracking-tighter w-full">
                 Saia da gestão passiva <br className="hidden sm:block" />
                 e assuma o{" "}
@@ -59,13 +53,11 @@ export default function HeroSection() {
                 </span>
               </h1>
               
-              {/* Descrição Copywriting */}
               <p className="text-muted-foreground text-base md:text-xl max-w-3xl leading-relaxed mx-auto font-medium px-2">
                 O que não é medido não é gerenciado. O <span className="text-white font-semibold">Combo Liberdade Financeira</span> constrói um ecossistema de dados para que você direcione seu capital com precisão técnica e clareza <span className="text-white font-semibold">absoluta de seu orçamento</span> sobre cada decisão.
               </p>
             </div>
 
-            {/* Grid de Features - Glassmorphism */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-4xl px-2">
               {features.map((item, i) => (
                 <div key={i} className="glass-card p-5 rounded-2xl flex items-start gap-5 border border-white/5 bg-white/5 backdrop-blur-sm">
@@ -80,7 +72,6 @@ export default function HeroSection() {
               ))}
             </div>
 
-            {/* Botão de Chamada para Ação (CTA) */}
             <div className="pt-6 w-full max-w-md">
               <Button asChild className="w-full bg-primary text-primary-foreground font-black py-8 text-xl rounded-2xl shadow-[0_0_50px_rgba(0,217,255,0.4)] transition-all hover:scale-105 active:scale-95">
                 <a href="https://pay.cakto.com.br/xxienb8_809928" target="_blank" rel="noopener">
@@ -90,14 +81,13 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* MOCKUP VISUAL - Com Parallax e Sombra Neon */}
           <motion.div 
             style={{ y: yMockup }}
             className="relative w-full max-w-[320px] md:max-w-2xl px-4 mt-4 mb-12 md:mb-20 will-change-transform"
           >
             <div className="absolute -inset-8 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[60px] blur-3xl opacity-50 z-0" />
             <div className="glass-card relative z-10 p-2 md:p-3 rounded-[32px] md:rounded-[40px] shadow-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md">
-              <img src="./f6.png" alt="Interface da Aplicação" className="w-full h-auto rounded-[24px] md:rounded-[32px]" />
+              <img src="./f6.png" alt="Interface" className="w-full h-auto rounded-[24px] md:rounded-[32px]" />
             </div>
           </motion.div>
           
