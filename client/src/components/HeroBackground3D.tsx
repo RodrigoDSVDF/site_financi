@@ -44,11 +44,11 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
-        // --- Engine Setup ---
+        // --- Configuração da Engine ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 6, 25); // Afastado para ver o volume total
+        camera.position.set(0, 6, 25); 
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -56,10 +56,10 @@
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         container.appendChild(renderer.domElement);
 
+        // --- Pós-Processamento ---
         const composer = new EffectComposer(renderer);
         composer.addPass(new RenderPass(scene, camera));
 
-        // Bloom sutil para não ofuscar a granulação da areia
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.4, 0.85);
         bloomPass.threshold = 0.15;
         bloomPass.strength = 1.3;
@@ -67,8 +67,7 @@
         composer.addPass(bloomPass);
         composer.addPass(new OutputPass());
 
-        // --- Objetos ---
-        
+        // --- Objetos de Cena ---
         const floorGeo = new THREE.PlaneGeometry(200, 200);
         const floorMat = new THREE.MeshStandardMaterial({ 
             color: 0x010101, 
@@ -97,7 +96,7 @@
         const aura = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.15, 60, 8), auraMat);
         core.add(aura);
 
-        // --- Sistema de Areia Ultra Volumétrico (12.000 partículas) ---
+        // --- Sistema de Areia (12.000 partículas) ---
         const particleCount = 12000;
         
         const createSandTexture = () => {
@@ -115,7 +114,7 @@
         };
 
         const sandTexture = createSandTexture();
-        const pGeo = new THREE.PlaneGeometry(0.06, 0.06); // Grãos menores e mais nítidos
+        const pGeo = new THREE.PlaneGeometry(0.06, 0.06);
         const pMat = new THREE.MeshBasicMaterial({
             map: sandTexture,
             color: 0x00ffaa,
@@ -141,7 +140,7 @@
         impactLight.position.set(0, -2.5, 0);
         scene.add(impactLight);
 
-        // --- Animação ---
+        // --- Lógica de Animação ---
         let clock = new THREE.Clock();
         let state = "falling"; 
         let timer = 0;
@@ -154,7 +153,6 @@
             particlesData.forEach(p => {
                 p.pos.set(0, -3, 0);
                 const angle = Math.random() * Math.PI * 2;
-                // Dispersão com maior variação de energia
                 const speed = 0.05 + Math.random() * 0.35;
                 const upwardForce = Math.random() * 0.15;
                 
@@ -171,24 +169,20 @@
             particlesData.forEach((p, i) => {
                 if(p.life > 0) {
                     p.pos.add(p.vel);
-                    
-                    // Gravidade e atrito individual
                     p.vel.y -= 0.0055; 
                     p.vel.x *= p.friction;
                     p.vel.z *= p.friction;
                     
-                    // Colisão e deslizamento na areia
                     if(p.pos.y < -3) {
                         p.pos.y = -3;
-                        p.vel.y *= -0.1; // Salto mínimo
-                        p.vel.multiplyScalar(0.85); // Atrito forte no solo
+                        p.vel.y *= -0.1; 
+                        p.vel.multiplyScalar(0.85); 
                     }
                     
                     p.life -= delta;
-                    const progress = p.life / p.maxLife;
+                    const progress = Math.max(0, p.life / p.maxLife);
                     
                     dummy.position.copy(p.pos);
-                    // Escala diminui levemente conforme a areia "esfria"
                     const s = p.scale * Math.pow(progress, 0.4);
                     dummy.scale.set(s, s, s);
                     dummy.quaternion.copy(camera.quaternion);
@@ -214,7 +208,6 @@
                 if(core.position.y - 30 <= -3.2) triggerImpact();
             } else if (state === "impact") {
                 impactLight.intensity *= 0.92;
-                // Tremor visual do raio
                 core.scale.x = 1 + Math.sin(timer * 70) * 0.3;
                 core.scale.z = core.scale.x;
                 if(timer > 0.4) state = "reset";
@@ -238,6 +231,7 @@
             composer.render();
         }
 
+        // --- Gestão de Eventos ---
         const cursor = document.getElementById('cursor');
         window.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
@@ -251,7 +245,10 @@
             composer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        animate();
+        // Iniciar após carregamento completo da janela
+        window.onload = () => {
+            animate();
+        };
     </script>
 </body>
 </html>
