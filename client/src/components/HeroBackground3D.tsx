@@ -11,6 +11,9 @@ const HeroBackground3D: React.FC = () => {
     if (!containerRef.current) return;
 
     // --- Configuração da Engine ---
+    // Habilita gerenciamento de cores moderno para brilho máximo
+    THREE.ColorManagement.enabled = true;
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 6, 25);
@@ -18,38 +21,40 @@ const HeroBackground3D: React.FC = () => {
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true, 
       powerPreference: "high-performance", 
-      alpha: true 
+      alpha: false // Preto sólido ajuda no contraste do brilho
     });
+    
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // Configurações de cores para o "Glamour"
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.outputColorSpace = THREE.SRGBColorSpace; // Garante cores corretas sem OutputPass
+    renderer.toneMappingExposure = 1.2;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    
     containerRef.current.appendChild(renderer.domElement);
 
-    // --- Pós-Processamento ---
+    // --- Pós-Processamento (O segredo do brilho) ---
     const composer = new EffectComposer(renderer);
-    
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.3, // força do brilho
-      0.5, // raio
-      0.15 // threshold
+      1.5,  // Força (Aumentado para mais glamour)
+      0.6,  // Raio
+      0.1   // Threshold (Mais sensível ao brilho)
     );
-    // Definimos como true para que ele seja o último pass a renderizar no canvas
+    
+    // IMPORTANTE: Faz o bloom renderizar direto na tela para evitar erros de importação
     bloomPass.renderToScreen = true; 
     composer.addPass(bloomPass);
 
     // --- Objetos de Cena ---
-    const floorGeo = new THREE.PlaneGeometry(200, 200);
-    const floorMat = new THREE.MeshStandardMaterial({ 
-      color: 0x010101, 
-      roughness: 0.4, 
-      metalness: 0.7 
-    });
-    const floor = new THREE.Mesh(floorGeo, floorMat);
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(200, 200),
+      new THREE.MeshStandardMaterial({ color: 0x010101, roughness: 0.3, metalness: 0.8 })
+    );
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -3;
     scene.add(floor);
@@ -57,101 +62,99 @@ const HeroBackground3D: React.FC = () => {
     const beamGroup = new THREE.Group();
     scene.add(beamGroup);
 
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const core = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.02, 60, 8), coreMat);
+    const core = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.01, 0.02, 60, 8), 
+      new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
     core.position.y = 30;
     beamGroup.add(core);
 
-    const auraMat = new THREE.MeshBasicMaterial({ 
-      color: 0x00ffaa, 
-      transparent: true, 
-      opacity: 0.15,
-      blending: THREE.AdditiveBlending 
-    });
-    const aura = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.15, 60, 8), auraMat);
+    const aura = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.04, 0.2, 60, 8),
+      new THREE.MeshBasicMaterial({ 
+        color: 0x00ffaa, 
+        transparent: true, 
+        opacity: 0.2,
+        blending: THREE.AdditiveBlending 
+      })
+    );
     core.add(aura);
 
-    // --- Sistema de Areia ---
+    // --- Sistema de Areia Ultra Denso (12.000 partículas) ---
     const particleCount = 12000;
     const createSandTexture = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = 32;
-      canvas.height = 32;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-        grad.addColorStop(0, 'white');
-        grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.7)');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 32, 32);
-      }
+      canvas.width = 64; canvas.height = 64;
+      const ctx = canvas.getContext('2d')!;
+      const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, 'white');
+      grad.addColorStop(0.2, 'rgba(0, 255, 170, 0.9)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 64, 64);
       return new THREE.CanvasTexture(canvas);
     };
 
-    const sandTexture = createSandTexture();
-    const pGeo = new THREE.PlaneGeometry(0.06, 0.06);
     const pMat = new THREE.MeshBasicMaterial({
-      map: sandTexture,
+      map: createSandTexture(),
       color: 0x00ffaa,
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      opacity: 0.8
+      opacity: 0.9
     });
 
-    const instancedSand = new THREE.InstancedMesh(pGeo, pMat, particleCount);
+    const instancedSand = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.08, 0.08), pMat, particleCount);
     const dummy = new THREE.Object3D();
     const particlesData = Array.from({ length: particleCount }, () => ({
       pos: new THREE.Vector3(0, -3, 0),
       vel: new THREE.Vector3(),
       life: 0,
-      maxLife: 3.0 + Math.random() * 3.0,
-      scale: 0.1 + Math.random() * 0.5,
-      friction: 0.96 + Math.random() * 0.03
+      maxLife: 2.5 + Math.random() * 3.5,
+      scale: 0.1 + Math.random() * 0.6,
+      friction: 0.95 + Math.random() * 0.03
     }));
     scene.add(instancedSand);
 
-    const impactLight = new THREE.PointLight(0x00ffaa, 0, 30, 1.5);
+    const impactLight = new THREE.PointLight(0x00ffaa, 0, 35, 2);
     impactLight.position.set(0, -2.5, 0);
     scene.add(impactLight);
 
-    // --- Lógica de Animação ---
+    // --- Animação ---
     let state = "falling"; 
     let animTimer = 0;
     const clock = new THREE.Clock();
+    let animationId: number;
 
     const triggerImpact = () => {
       state = "impact";
       animTimer = 0;
-      impactLight.intensity = 80;
+      impactLight.intensity = 100; // Explosão de luz
       particlesData.forEach(p => {
         p.pos.set(0, -3, 0);
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.05 + Math.random() * 0.35;
-        p.vel.set(Math.cos(angle) * speed, Math.random() * 0.15, Math.sin(angle) * speed);
+        const speed = 0.08 + Math.random() * 0.4;
+        p.vel.set(Math.cos(angle) * speed, Math.random() * 0.18, Math.sin(angle) * speed);
         p.life = p.maxLife;
       });
     };
 
-    let animationId: number;
-
     const animate = () => {
-      const delta = clock.getDelta();
+      const delta = Math.min(clock.getDelta(), 0.1);
       const elapsed = clock.getElapsedTime();
       animTimer += delta;
 
       if (state === "falling") {
-        core.position.y -= 50 * delta;
+        core.position.y -= 55 * delta;
         if (core.position.y - 30 <= -3.2) triggerImpact();
       } else if (state === "impact") {
-        impactLight.intensity *= 0.92;
-        core.scale.x = 1 + Math.sin(animTimer * 70) * 0.3;
+        impactLight.intensity *= 0.93;
+        core.scale.x = 1 + Math.sin(animTimer * 60) * 0.4;
         core.scale.z = core.scale.x;
         if (animTimer > 0.4) state = "reset";
       } else if (state === "reset") {
-        core.scale.lerp(new THREE.Vector3(0, 1, 0), 0.15);
-        impactLight.intensity *= 0.8;
+        core.scale.lerp(new THREE.Vector3(0, 1, 0), 0.1);
+        impactLight.intensity *= 0.85;
         if (animTimer > 8) {
           state = "falling";
           animTimer = 0;
@@ -160,22 +163,20 @@ const HeroBackground3D: React.FC = () => {
         }
       }
 
-      // Update Particles
       particlesData.forEach((p, i) => {
         if (p.life > 0) {
           p.pos.add(p.vel);
-          p.vel.y -= 0.0055; 
+          p.vel.y -= 0.006; 
           p.vel.x *= p.friction;
           p.vel.z *= p.friction;
           if (p.pos.y < -3) {
             p.pos.y = -3;
-            p.vel.y *= -0.1; 
-            p.vel.multiplyScalar(0.85); 
+            p.vel.y *= -0.12; 
+            p.vel.multiplyScalar(0.8); 
           }
           p.life -= delta;
-          const progress = Math.max(0, p.life / p.maxLife);
           dummy.position.copy(p.pos);
-          const s = p.scale * Math.pow(progress, 0.4);
+          const s = p.scale * Math.pow(Math.max(0, p.life / p.maxLife), 0.5);
           dummy.scale.set(s, s, s);
           dummy.quaternion.copy(camera.quaternion);
           dummy.updateMatrix();
@@ -188,7 +189,7 @@ const HeroBackground3D: React.FC = () => {
       });
       instancedSand.instanceMatrix.needsUpdate = true;
 
-      camera.position.x = Math.sin(elapsed * 0.05) * 3;
+      camera.position.x = Math.sin(elapsed * 0.1) * 2;
       camera.lookAt(0, 0, 0);
 
       composer.render();
@@ -198,38 +199,28 @@ const HeroBackground3D: React.FC = () => {
     animate();
 
     const handleResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      camera.aspect = width / height;
+      camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-      composer.setSize(width, height);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
     };
 
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationId);
       renderer.dispose();
-      if (containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
-      }
+      pMat.dispose();
+      instancedSand.geometry.dispose();
+      if (containerRef.current) containerRef.current.removeChild(renderer.domElement);
     };
   }, []);
 
   return (
     <div 
       ref={containerRef} 
-      style={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        zIndex: -1, 
-        background: '#000' 
-      }} 
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: -1, background: '#000' }} 
     />
   );
 };
