@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
 const HeroBackground3D: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -16,24 +15,32 @@ const HeroBackground3D: React.FC = () => {
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 6, 25);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance", alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true, 
+      powerPreference: "high-performance", 
+      alpha: true 
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputColorSpace = THREE.SRGBColorSpace; // Garante cores corretas sem OutputPass
     containerRef.current.appendChild(renderer.domElement);
 
     // --- Pós-Processamento ---
     const composer = new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene, camera));
+    
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.3, // strength
-      0.5, // radius
+      1.3, // força do brilho
+      0.5, // raio
       0.15 // threshold
     );
+    // Definimos como true para que ele seja o último pass a renderizar no canvas
+    bloomPass.renderToScreen = true; 
     composer.addPass(bloomPass);
-    composer.addPass(new OutputPass());
 
     // --- Objetos de Cena ---
     const floorGeo = new THREE.PlaneGeometry(200, 200);
@@ -111,12 +118,12 @@ const HeroBackground3D: React.FC = () => {
 
     // --- Lógica de Animação ---
     let state = "falling"; 
-    let timer = 0;
+    let animTimer = 0;
     const clock = new THREE.Clock();
 
     const triggerImpact = () => {
       state = "impact";
-      timer = 0;
+      animTimer = 0;
       impactLight.intensity = 80;
       particlesData.forEach(p => {
         p.pos.set(0, -3, 0);
@@ -127,25 +134,27 @@ const HeroBackground3D: React.FC = () => {
       });
     };
 
+    let animationId: number;
+
     const animate = () => {
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
-      timer += delta;
+      animTimer += delta;
 
       if (state === "falling") {
         core.position.y -= 50 * delta;
         if (core.position.y - 30 <= -3.2) triggerImpact();
       } else if (state === "impact") {
         impactLight.intensity *= 0.92;
-        core.scale.x = 1 + Math.sin(timer * 70) * 0.3;
+        core.scale.x = 1 + Math.sin(animTimer * 70) * 0.3;
         core.scale.z = core.scale.x;
-        if (timer > 0.4) state = "reset";
+        if (animTimer > 0.4) state = "reset";
       } else if (state === "reset") {
         core.scale.lerp(new THREE.Vector3(0, 1, 0), 0.15);
         impactLight.intensity *= 0.8;
-        if (timer > 8) {
+        if (animTimer > 8) {
           state = "falling";
-          timer = 0;
+          animTimer = 0;
           core.position.y = 50;
           core.scale.set(1, 1, 1);
         }
@@ -183,22 +192,25 @@ const HeroBackground3D: React.FC = () => {
       camera.lookAt(0, 0, 0);
 
       composer.render();
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
     };
 
     animate();
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      composer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(width, height);
+      composer.setSize(width, height);
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationId);
       renderer.dispose();
       if (containerRef.current) {
         containerRef.current.removeChild(renderer.domElement);
