@@ -42,14 +42,14 @@ export default function HeroSection() {
             <div className="space-y-4 md:space-y-6 w-full">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">
                 <ShieldCheck className="w-3 h-3 md:w-4 md:h-4 text-primary animate-pulse" />
-                Sistemas Patrimoniais de Elite
+                Sistema  de Gestão  Financeira 
               </div>
               
               <h1 className="text-[2.6rem] leading-[1.1] sm:text-6xl lg:text-8xl font-black text-white tracking-tighter w-full">
                 Saia da gestão passiva <br className="hidden sm:block" />
                 e assuma o{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/90 to-white">
-                  controle estratégico.
+                  controle das suas finanças.
                 </span>
               </h1>
               
@@ -75,7 +75,7 @@ export default function HeroSection() {
             <div className="pt-6 w-full max-w-md">
               <Button asChild className="w-full bg-primary text-black hover:bg-primary/90 font-black py-8 text-xl rounded-2xl shadow-[0_0_40px_rgba(0,255,170,0.4)] transition-all hover:scale-105 active:scale-95">
                 <a href="https://pay.cakto.com.br/xxienb8_809928" target="_blank" rel="noopener">
-                  ATIVAR AGORA <ArrowRight className="ml-2 w-6 h-6" />
+                  ACESSAR AGORA <ArrowRight className="ml-2 w-6 h-6" />
                 </a>
               </Button>
             </div>
