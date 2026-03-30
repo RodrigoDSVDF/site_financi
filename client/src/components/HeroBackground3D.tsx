@@ -26,7 +26,7 @@ const HeroBackground3D: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.6; 
+    renderer.toneMappingExposure = 1.4; // Exposição levemente reduzida para suavidade
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     
     containerRef.current.appendChild(renderer.domElement);
@@ -38,9 +38,9 @@ const HeroBackground3D: React.FC = () => {
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      2.4, 
-      0.45,
-      0.02
+      2.0, // Brilho mais contido
+      0.4,
+      0.05
     );
     bloomPass.renderToScreen = true;
     composer.addPass(bloomPass);
@@ -50,7 +50,7 @@ const HeroBackground3D: React.FC = () => {
       new THREE.PlaneGeometry(400, 400),
       new THREE.MeshStandardMaterial({ 
         color: 0x010101, 
-        roughness: 0.12, 
+        roughness: 0.15, 
         metalness: 0.9 
       })
     );
@@ -63,32 +63,32 @@ const HeroBackground3D: React.FC = () => {
     scene.add(beamGroup);
 
     const core = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.02, 0.04, 85, 8), 
+      new THREE.CylinderGeometry(0.015, 0.03, 85, 8), 
       new THREE.MeshBasicMaterial({ color: 0xffffff })
     );
     beamGroup.add(core);
 
     const aura = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.35, 85, 8),
+      new THREE.CylinderGeometry(0.06, 0.25, 85, 8),
       new THREE.MeshBasicMaterial({ 
         color: 0x00ffaa, 
         transparent: true, 
-        opacity: 0.45,
+        opacity: 0.35,
         blending: THREE.AdditiveBlending 
       })
     );
     core.add(aura);
 
-    // --- Sistema de Partículas (20.000) ---
-    const particleCount = 20000;
+    // --- Sistema de Partículas (15.000) ---
+    const particleCount = 15000;
     const createParticleTexture = () => {
       const canvas = document.createElement('canvas');
       canvas.width = 64; canvas.height = 64;
       const ctx = canvas.getContext('2d')!;
       const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
       grad.addColorStop(0, 'white');
-      grad.addColorStop(0.2, 'rgba(0, 255, 170, 0.9)');
-      grad.addColorStop(0.5, 'rgba(0, 50, 30, 0.2)');
+      grad.addColorStop(0.2, 'rgba(0, 255, 170, 0.8)');
+      grad.addColorStop(0.5, 'rgba(0, 50, 30, 0.1)');
       grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 64, 64);
@@ -101,23 +101,23 @@ const HeroBackground3D: React.FC = () => {
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      opacity: 0.95
+      opacity: 0.85
     });
 
-    const instancedSand = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.15, 0.15), pMat, particleCount);
+    const instancedSand = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.12, 0.12), pMat, particleCount);
     const dummy = new THREE.Object3D();
     const particlesData = Array.from({ length: particleCount }, () => ({
       pos: new THREE.Vector3(0, -20, 0),
       vel: new THREE.Vector3(),
       life: 0,
-      maxLife: 3.5 + Math.random() * 5.5,
-      scale: 0.2 + Math.random() * 1.1,
-      friction: 0.965 + Math.random() * 0.025
+      maxLife: 3.0 + Math.random() * 4.0,
+      scale: 0.15 + Math.random() * 0.8, // Escala menor
+      friction: 0.94 + Math.random() * 0.03 // Mais atrito para parar antes
     }));
     scene.add(instancedSand);
 
     // Luz de impacto (Ponto verde central)
-    const impactLight = new THREE.PointLight(0x00ffaa, 0, 65, 1.8);
+    const impactLight = new THREE.PointLight(0x00ffaa, 0, 45, 1.5);
     impactLight.position.set(0, -2.5, 0);
     scene.add(impactLight);
 
@@ -129,18 +129,18 @@ const HeroBackground3D: React.FC = () => {
     const triggerImpact = () => {
       state = "impact";
       animTimer = 0;
-      impactLight.intensity = 200; // Flash inicial forte
+      impactLight.intensity = 120; // Flash mais leve
       
       beamGroup.visible = false; 
 
       particlesData.forEach(p => {
         p.pos.set(0, -3.5, 0);
         const angle = Math.random() * Math.PI * 2;
-        // Velocidade mínima garantida para evitar acúmulo no centro exato
-        const speed = 0.15 + Math.random() * 0.55;
+        // Velocidade reduzida para uma "explosão" mais contida
+        const speed = 0.08 + Math.random() * 0.35; 
         p.vel.set(
           Math.cos(angle) * speed, 
-          0.12 + Math.random() * 0.3, 
+          0.1 + Math.random() * 0.2, 
           Math.sin(angle) * speed
         );
         p.life = p.maxLife;
@@ -154,13 +154,12 @@ const HeroBackground3D: React.FC = () => {
 
       if (state === "falling") {
         beamGroup.visible = true;
-        core.position.y -= 75 * delta; 
+        core.position.y -= 70 * delta; 
         if (core.position.y < 31) triggerImpact();
       } else if (state === "impact") {
-        // Redução progressiva e suave do ponto de luz central
-        impactLight.intensity *= 0.91; 
+        impactLight.intensity *= 0.88; 
         if (animTimer > 1.2) state = "reset";
-      } else if (state === "reset" && animTimer > 8.5) {
+      } else if (state === "reset" && animTimer > 8.0) {
         state = "falling";
         animTimer = 0;
         core.position.y = 85; 
@@ -169,22 +168,21 @@ const HeroBackground3D: React.FC = () => {
       particlesData.forEach((p, i) => {
         if (p.life > 0) {
           p.pos.add(p.vel);
-          p.vel.y -= 0.0075; // Gravidade ligeiramente maior
+          p.vel.y -= 0.006; // Gravidade mais suave
           p.vel.x *= p.friction;
           p.vel.z *= p.friction;
           
           if (p.pos.y < -3.5) { 
             p.pos.y = -3.5; 
-            p.vel.y *= -0.12; 
-            p.vel.multiplyScalar(0.85);
+            p.vel.y *= -0.1; 
+            p.vel.multiplyScalar(0.8);
           }
           
           p.life -= delta;
           const progress = p.life / p.maxLife;
           dummy.position.copy(p.pos);
           
-          // Escala diminui progressivamente
-          const s = p.scale * Math.pow(progress, 0.6);
+          const s = p.scale * Math.pow(progress, 0.7);
           dummy.scale.set(s, s, s);
           dummy.quaternion.copy(camera.quaternion);
           dummy.updateMatrix();
@@ -197,9 +195,8 @@ const HeroBackground3D: React.FC = () => {
       });
       instancedSand.instanceMatrix.needsUpdate = true;
 
-      // Movimento orbital suave da câmera
-      camera.position.x = Math.sin(elapsed * 0.08) * 2.2;
-      camera.lookAt(0, 1.5, 0);
+      camera.position.x = Math.sin(elapsed * 0.06) * 1.8;
+      camera.lookAt(0, 1.2, 0);
 
       composer.render();
       requestAnimationFrame(animate);
