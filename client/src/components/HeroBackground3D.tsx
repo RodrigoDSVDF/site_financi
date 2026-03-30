@@ -11,7 +11,6 @@ const HeroBackground3D: React.FC = () => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // --- Configuração da Engine ---
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 6, 22);
@@ -22,13 +21,12 @@ const HeroBackground3D: React.FC = () => {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     containerRef.current.appendChild(renderer.domElement);
 
-    // --- Pós-Processamento (Brilho Neon) ---
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight), 
-      1.2, // Força do brilho
+      1.2, 
       0.4, 
       0.85
     );
@@ -36,7 +34,6 @@ const HeroBackground3D: React.FC = () => {
     composer.addPass(bloomPass);
     composer.addPass(new OutputPass());
 
-    // --- Objetos: Solo e Feixe de Luz ---
     const floorGeo = new THREE.PlaneGeometry(200, 200);
     const floorMat = new THREE.MeshStandardMaterial({ color: 0x010101, roughness: 0.35, metalness: 0.6 });
     const floor = new THREE.Mesh(floorGeo, floorMat);
@@ -60,7 +57,6 @@ const HeroBackground3D: React.FC = () => {
     );
     core.add(aura);
 
-    // --- Sistema de Partículas (Areia) ---
     const particleCount = 6000;
     const createSandTexture = () => {
       const canvas = document.createElement('canvas');
@@ -99,7 +95,6 @@ const HeroBackground3D: React.FC = () => {
     impactLight.position.set(0, -2.2, 0);
     scene.add(impactLight);
 
-    // --- Lógica de Animação ---
     let clock = new THREE.Clock();
     let state = "falling"; 
     let timer = 0;
@@ -137,7 +132,6 @@ const HeroBackground3D: React.FC = () => {
         }
       }
 
-      // Atualizar Partículas
       particlesData.forEach((p, i) => {
         if (p.life > 0) {
           p.pos.add(p.vel);
@@ -164,9 +158,8 @@ const HeroBackground3D: React.FC = () => {
       requestAnimationFrame(animate);
     };
 
-    animate();
+    const animId = requestAnimationFrame(animate);
 
-    // --- Limpeza ---
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -177,6 +170,7 @@ const HeroBackground3D: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animId);
       renderer.dispose();
       containerRef.current?.removeChild(renderer.domElement);
     };
@@ -192,23 +186,4 @@ const HeroBackground3D: React.FC = () => {
 };
 
 export default HeroBackground3D;
-
-2. Por que isso é melhor para o seu site?
- * Vite Compatibility: No código que você enviou, os imports vinham de URLs (https://...). No React/Vite, usamos a pasta node_modules. O código acima já está configurado para o padrão correto (three/examples/jsm/...).
- * Gerenciamento de Memória: O React precisa "limpar" o Three.js quando você muda de página, caso contrário o site começa a ficar lento. Adicionei o return () => { renderer.dispose(); } para evitar isso.
- * Z-Index: Configurei o div para ficar no z-0 e com pointer-events-none. Isso garante que o efeito fique atrás dos seus textos e que os botões continuem funcionando.
-3. Opcional: O Cursor Brilhante
-O código original tinha um cursor neon. Se você quiser ele também, adicione este pequeno bloco de CSS no seu arquivo global de estilos (index.css ou similar):
-.glow-cursor {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background: #00ffaa;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    box-shadow: 0 0 15px #00ffaa;
-    mix-blend-mode: screen;
-}
-
 
